@@ -41,11 +41,7 @@ const addSymbolsGivenLength = (originString, minLength, symbols) => {
     return String(originString);
   } else {
     minLength = minLength - originString.length;
-
-    // if (minLength > symbols.length) {
-    //   symbols += symbols.repeat(minLength / symbols.length);
-    // }
-    // return symbols.slice(0,minLength) + String(originString);
+    return symbols.slice(0, minLength % symbols.length) + symbols.repeat(minLength / symbols.length) + String(originString);
   }
 };
 addSymbolsGivenLength('q', 4, 'we');
