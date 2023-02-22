@@ -7,15 +7,21 @@ checkStringLength('проверяемая строка', 20);
 
 
 //Функция для проверки, является ли строка палиндромом
-const isPalindrome = function (word) {
-  return word.split('').reverse().join('') === word;
+const isPalindrome = (word) => {
+  let newString = '';
+  word = word.toLowerCase().split(' ').join('');
+
+  for (let i = word.length - 1; i >= 0; i--) {
+    newString += word[i];
+  }
+  return word === newString;
 };
-isPalindrome('keks');
+
 isPalindrome('Лёша на полке клопа нашёл');
 
 
 // Функция возвращает целые положительные числа из строки
-const isNumbers = function (string) {
+const isNumbers = (string) => {
   let newArray = '';
   for (let i = 0; i < string.length; i++) {
     if (!isNaN(parseInt(string[i], 10))) {
@@ -29,19 +35,17 @@ isNumbers('2023 год');
 
 // Функция возвращает исходную строку, дополненную указанными символами до заданной длины
 
-const addSymbolsGivenLength = function (originString, minLength, symbols) {
-  // originString = 'q';
-  // minLength = 4;
-  // symbols = 'we';
+const addSymbolsGivenLength = (originString, minLength, symbols) => {
 
   if (originString.length > minLength) {
     return String(originString);
   } else {
     minLength = minLength - originString.length;
-    if (minLength > symbols.length) {
-      symbols += symbols.repeat(minLength / symbols.length);
-    }
-    return symbols.slice(0,minLength) + String(originString);
+
+    // if (minLength > symbols.length) {
+    //   symbols += symbols.repeat(minLength / symbols.length);
+    // }
+    // return symbols.slice(0,minLength) + String(originString);
   }
 };
-addSymbolsGivenLength('1', 2, '0');
+addSymbolsGivenLength('q', 4, 'we');
