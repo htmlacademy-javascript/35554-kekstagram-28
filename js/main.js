@@ -93,29 +93,7 @@ const createDescriptionPublishedPhoto = () => ({
   comments: Array.from({length: SIMILAR_COMMENT_COUNT}, createCommentPhoto),
 });
 
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
-console.log(createDescriptionPublishedPhoto());
+createDescriptionPublishedPhoto();
+
+// console.log(createDescriptionPublishedPhoto());
+
