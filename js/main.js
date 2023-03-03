@@ -1,3 +1,4 @@
 import {createDescriptionsPhoto} from './data.js';
 
-console.log(createDescriptionsPhoto());
+createDescriptionsPhoto();
+// console.log(createDescriptionsPhoto());
