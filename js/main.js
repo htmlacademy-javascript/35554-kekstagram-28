@@ -1,4 +1,3 @@
-import {createDescriptionsPhoto} from './data.js';
+import './photo-thumbnails.js';
 
-createDescriptionsPhoto();
-// console.log(createDescriptionsPhoto());
+// console.log(pictureThumbnails);

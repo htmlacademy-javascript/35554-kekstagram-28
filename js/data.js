@@ -1,6 +1,12 @@
 import {createIdGenerator, getRandomInteger, createRandomId, getRandomArrayElement} from './util.js';
 
 const MAX_ID_PHOTO = 25;
+const MIN_NUMBER = 1;
+const MAX_ID_COMMENT = 1000;
+const MAX_ID_AVATAR = 6;
+const MAX_NUMBER_SENTENCE = 2;
+const MIN_LIKES = 15;
+const MAX_LIKES = 200;
 const SIMILAR_COMMENT_COUNT = 3;
 
 const MESSAGES = [
@@ -40,12 +46,12 @@ const DESCRIPTIONS = [
 
 const randomId = createIdGenerator(MAX_ID_PHOTO);
 const randomIdPhoto = createIdGenerator(MAX_ID_PHOTO);
-const randomIdComment = createRandomId(1, 1000);
+const randomIdComment = createRandomId(MIN_NUMBER, MAX_ID_COMMENT);
 
 const createCommentPhoto = () => ({
   id: randomIdComment(),
-  avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
-  message: Array.from({length: getRandomInteger(1, 2)},
+  avatar: `img/avatar-${getRandomInteger(MIN_NUMBER, MAX_ID_AVATAR)}.svg`,
+  message: Array.from({length: getRandomInteger(MIN_NUMBER, MAX_NUMBER_SENTENCE)},
     () => getRandomArrayElement(MESSAGES)).join(' '),
   name: getRandomArrayElement(NAMES),
 });
@@ -54,7 +60,7 @@ const createDescriptionPublishedPhoto = () => ({
   id: randomId(),
   url: `photos/${randomIdPhoto()}.jpg`,
   description: getRandomArrayElement(DESCRIPTIONS),
-  likes: getRandomInteger(15, 200),
+  likes: getRandomInteger(MIN_LIKES, MAX_LIKES),
   comments: Array.from({length: SIMILAR_COMMENT_COUNT}, createCommentPhoto),
 });
 
