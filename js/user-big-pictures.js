@@ -16,6 +16,7 @@ const commentsLoader = document.querySelector('.comments-loader');
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
+    // eslint-disable-next-line no-use-before-define
     closePictureElement();
   }
 };
