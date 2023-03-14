@@ -1,3 +1,1 @@
-import './photo-thumbnails.js';
-
-// console.log(pictureThumbnails);
+import './user-big-pictures.js';
