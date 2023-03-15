@@ -13,7 +13,6 @@ const commentsCountElement = document.querySelector('.comments-count');
 const descriptionPictureElement = document.querySelector('.social__caption');
 const commentsPictureElement = document.querySelector('.social__comments');
 const commentPictureElement = document.querySelector('.social__comment');
-const commentAllElement = document.querySelectorAll('.social__comment');
 const commentsLoaderElement = document.querySelector('.comments-loader');
 
 const onDocumentKeydown = (evt) => {
@@ -38,21 +37,27 @@ const renderCommentsPicture = (elements, from, to) => {
   commentsPictureElement.append(commentListFragment);
 };
 
-const loadMoreComment = (elements) => {
+const loadMoreComment = (elements, from, to) => {
+  console.log(commentsPictureElement.children.length);
   console.log(elements.length);
-  let from = 0;
-  let to = elements.length <= MAX_COMMENTS ? elements.length : MAX_COMMENTS;
-  console.log(from, to);
-  return () => {
-    // const cropListComments = elements.slice(from, to);
-    renderCommentsPicture(elements, from, to);
-    if (commentsPictureElement.children.length === elements.length) {
-      commentsLoaderElement.classList.add('hidden');
-    }
+  while (commentsPictureElement.children.length <= elements.length) {
+    console.log(from, to);
     from += MAX_COMMENTS;
     to += MAX_COMMENTS;
-    console.log(to, from);
-  };
+    console.log('2 - ' + from, to);
+    return () => {
+      renderCommentsPicture(elements, from, to);
+      commentsCountContainerElement.textContent = `${commentsPictureElement.children.length} из ${elements.length} комментариев`;
+      console.log(commentsPictureElement.children.length);
+      console.log(`element ${elements.length}`);
+      if (commentsPictureElement.children.length === elements.length) {
+        commentsLoaderElement.classList.add('hidden');
+      }
+      from += MAX_COMMENTS;
+      to += MAX_COMMENTS;
+      console.log(from, to);
+    };
+  }
 };
 
 const clearCommentsList = () => {
@@ -60,15 +65,19 @@ const clearCommentsList = () => {
 };
 
 const renderDescriptionBigPicture = (element) => {
+  const from = 0;
+  const to = MAX_COMMENTS;
   bigPictureElement.src = element.url;
   likesCountPictureElement.textContent = element.likes;
   commentsCountElement.textContent = element.comments.length;
   descriptionPictureElement.textContent = element.description;
   clearCommentsList();
-  renderCommentsPicture(element.comments);
-  // loadMoreComment(element.comments);
-  commentsLoaderElement.addEventListener('click', loadMoreComment(element.comments));
-  // renderCommentsPicture(element.comments);
+  renderCommentsPicture(element.comments, from, to);
+  console.log('cjmment length ' + commentsPictureElement.children.length, 'element ' + element.comments.length);
+  if (commentsPictureElement.children.length === element.comments.length) {
+    commentsLoaderElement.classList.add('hidden');
+  }
+  commentsLoaderElement.addEventListener('click', loadMoreComment(element.comments, from, to));
 };
 
 const openPictureElement = () => {
