@@ -89,7 +89,6 @@ picturesContainerElement.addEventListener('click', (evt) => {
     evt.preventDefault();
     openPictureElement();
     const data = pictureThumbnails.find((x) => x.id === parseInt(evt.target.id, 10));
-    console.log(data);
     renderDescriptionBigPicture(data);
   }
 });
