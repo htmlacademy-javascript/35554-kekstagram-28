@@ -38,24 +38,17 @@ const renderCommentsPicture = (elements, from, to) => {
 };
 
 const loadMoreComment = (elements, from, to) => {
-  console.log(commentsPictureElement.children.length);
-  console.log(elements.length);
   while (commentsPictureElement.children.length <= elements.length) {
-    console.log(from, to);
     from += MAX_COMMENTS;
     to += MAX_COMMENTS;
-    console.log('2 - ' + from, to);
     return () => {
       renderCommentsPicture(elements, from, to);
       commentsCountContainerElement.textContent = `${commentsPictureElement.children.length} из ${elements.length} комментариев`;
-      console.log(commentsPictureElement.children.length);
-      console.log(`element ${elements.length}`);
       if (commentsPictureElement.children.length === elements.length) {
         commentsLoaderElement.classList.add('hidden');
       }
       from += MAX_COMMENTS;
       to += MAX_COMMENTS;
-      console.log(from, to);
     };
   }
 };
@@ -73,7 +66,6 @@ const renderDescriptionBigPicture = (element) => {
   descriptionPictureElement.textContent = element.description;
   clearCommentsList();
   renderCommentsPicture(element.comments, from, to);
-  console.log('cjmment length ' + commentsPictureElement.children.length, 'element ' + element.comments.length);
   if (commentsPictureElement.children.length === element.comments.length) {
     commentsLoaderElement.classList.add('hidden');
   }
