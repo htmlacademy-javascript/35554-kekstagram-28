@@ -7,7 +7,7 @@ const MAX_ID_AVATAR = 6;
 const MAX_NUMBER_SENTENCE = 2;
 const MIN_LIKES = 15;
 const MAX_LIKES = 200;
-const SIMILAR_COMMENT_COUNT = 17;
+const SIMILAR_COMMENT_COUNT = 12;
 
 const MESSAGES = [
   'Всё отлично!',
