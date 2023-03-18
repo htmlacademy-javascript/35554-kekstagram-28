@@ -15,6 +15,8 @@ const commentsPictureElement = document.querySelector('.social__comments');
 const commentPictureElement = document.querySelector('.social__comment');
 const commentsLoaderElement = document.querySelector('.comments-loader');
 
+renderDescriptionPictureList();
+
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
@@ -26,8 +28,6 @@ const onDocumentKeydown = (evt) => {
 const clearCommentsList = () => {
   commentsPictureElement.innerHTML = '';
 };
-
-renderDescriptionPictureList();
 
 const renderCommentsPicture = (elements, from, to) => {
   const commentListFragment = document.createDocumentFragment();
