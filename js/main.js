@@ -1,2 +1,2 @@
-import './user-big-pictures.js';
+import './big-pictures.js';
 import './form.js';
