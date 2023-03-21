@@ -87,9 +87,7 @@ const closePictureElement = () => {
   commentsLoaderElement.classList.remove('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
-  bigPictureCloseElement.removeEventListener('click', () => {
-    closePictureElement();
-  });
+  bigPictureCloseElement.removeEventListener('click', closePictureElement);
 };
 
 picturesContainerElement.addEventListener('click', (evt) => {
@@ -99,8 +97,7 @@ picturesContainerElement.addEventListener('click', (evt) => {
     const data = pictureThumbnails.find((x) => x.id === parseInt(evt.target.id, 10));
     renderDescriptionBigPicture(data);
   }
+  bigPictureCloseElement.addEventListener('click', closePictureElement);
 });
 
-bigPictureCloseElement.addEventListener('click', () => {
-  closePictureElement();
-});
+
