@@ -1,5 +1,5 @@
 import {isEscapeKey} from './util.js';
-import {pictureThumbnails, renderDescriptionPictureList} from './photo-thumbnails.js';
+import {pictureThumbnails} from './photo-thumbnails.js';
 
 const MAX_COMMENTS = 5;
 
@@ -15,18 +15,30 @@ const commentsPictureElement = document.querySelector('.social__comments');
 const commentPictureElement = document.querySelector('.social__comment');
 const commentsLoaderElement = document.querySelector('.comments-loader');
 
-renderDescriptionPictureList();
-
-const onDocumentKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    // eslint-disable-next-line no-use-before-define
-    closePictureElement();
-  }
-};
-
 const clearCommentsList = () => {
   commentsPictureElement.innerHTML = '';
+};
+
+const openPictureElement = () => {
+  bigPictureContainerElement.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  document.addEventListener('keydown', onDocumentKeydown);
+};
+
+const closePictureElement = () => {
+  bigPictureContainerElement.classList.add('hidden');
+  clearCommentsList();
+  commentsLoaderElement.classList.remove('hidden');
+  document.body.classList.remove('modal-open');
+  document.removeEventListener('keydown', onDocumentKeydown);
+  bigPictureCloseElement.removeEventListener('click', closePictureElement);
+};
+
+function onDocumentKeydown(evt) {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closePictureElement();
+  }
 };
 
 const renderCommentsPicture = (elements, from, to) => {
@@ -75,27 +87,14 @@ const renderDescriptionBigPicture = (element) => {
   commentsLoaderElement.addEventListener('click', loadMoreComment(element.comments, from, to));
 };
 
-const openPictureElement = () => {
-  bigPictureContainerElement.classList.remove('hidden');
-  document.body.classList.add('modal-open');
-  document.addEventListener('keydown', onDocumentKeydown);
-};
-
-const closePictureElement = () => {
-  bigPictureContainerElement.classList.add('hidden');
-  clearCommentsList();
-  commentsLoaderElement.classList.remove('hidden');
-  document.body.classList.remove('modal-open');
-  document.removeEventListener('keydown', onDocumentKeydown);
-  bigPictureCloseElement.removeEventListener('click', closePictureElement);
-};
-
 picturesContainerElement.addEventListener('click', (evt) => {
-  if (evt.target.closest('.picture__img')) {
+  const thumbnail = evt.target.closest('.picture');
+  if (thumbnail) {
     evt.preventDefault();
     openPictureElement();
-    const data = pictureThumbnails.find((x) => x.id === parseInt(evt.target.id, 10));
-    renderDescriptionBigPicture(data);
+    const dataPicture = pictureThumbnails.find((x) =>
+      x.id === parseInt(thumbnail.dataset.thumbnailId, 10));
+    renderDescriptionBigPicture(dataPicture);
   }
   bigPictureCloseElement.addEventListener('click', closePictureElement);
 });
