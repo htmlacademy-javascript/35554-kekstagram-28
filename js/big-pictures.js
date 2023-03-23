@@ -39,7 +39,7 @@ function onDocumentKeydown(evt) {
     evt.preventDefault();
     closePictureElement();
   }
-};
+}
 
 const renderCommentsPicture = (elements, from, to) => {
   const commentListFragment = document.createDocumentFragment();
