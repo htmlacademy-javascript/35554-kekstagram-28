@@ -1,10 +1,8 @@
-import {isEscapeKey, isNumbers} from './util.js';
+import {isEscapeKey} from './util.js';
+import {resetScale} from './scale.js';
 
 const MAX_HASHTAG = 5;
 const MAX_LENGTH_DESCRIPTION = 140;
-const MIN_SCALE = 25;
-const MAX_SCALE = 100;
-const STEP_SCALE = 25;
 const ERROR_DESCRIPTION = 'не более 140 символов';
 const ERROR_HASHTAG = 'Хештег содержит в начале #, состоит только из букв, чисел, без пробелов, спецсимволов, символов пунктуации, эмодзи и т.д.';
 
@@ -14,22 +12,20 @@ const uploadImageElement = document.querySelector('#upload-file');
 const uploadCancelElement = document.querySelector('#upload-cancel');
 const textHashtagElement = pictureFormElement.querySelector('.text__hashtags');
 const textDescriptionElement = pictureFormElement.querySelector('.text__description');
-const scaleSmallerElement = document.querySelector('.scale__control--smaller');
-const scaleBiggerElement = document.querySelector('.scale__control--bigger');
-const scaleValueElement = document.querySelector('.scale__control--value');
-const imagePreviewElement = document.querySelector('.img-upload__preview img');
+
 const hashtagRegex = /^#[a-zа-яё\d]{1,19}$/i;
 
 const openModal = () => {
   formEditImageElement.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  scaleValueElement.setAttribute('value', `${MAX_SCALE }%`);
+  resetScale();
   document.addEventListener('keydown', onDocumentKeydown);
 };
 
 const closeModal = () => {
   formEditImageElement.classList.add('hidden');
   document.body.classList.remove('modal-open');
+  pictureFormElement.reset();
   uploadImageElement.value = '';
   textHashtagElement.value = '';
   textDescriptionElement.value = '';
@@ -47,38 +43,12 @@ function onDocumentKeydown(evt) {
   }
 }
 
-const changeValueScale = (element) => {
-  scaleValueElement.setAttribute('value', `${element} %`);
-  imagePreviewElement.style.transform = `scale(${element / 100}deg)`;
-  console.log(`${element / 100}`, imagePreviewElement.style.transform);
-};
-
-const editScalePicture = () => {
-  let scaleValue = isNumbers(scaleValueElement.value);
-  scaleSmallerElement.addEventListener('click', () => {
-    if (scaleValue === MIN_SCALE) {
-      return;
-    }
-    scaleValue -= STEP_SCALE;
-    changeValueScale(scaleValue);
-  });
-  scaleBiggerElement.addEventListener('click', () => {
-    if (scaleValue === MAX_SCALE) {
-      return;
-    }
-    scaleValue += STEP_SCALE;
-    changeValueScale(scaleValue);
-  });
-};
-
 uploadImageElement.addEventListener('change', () => {
   openModal();
-  editScalePicture();
+  // editScalePicture();
 });
 
 uploadCancelElement.addEventListener('click', closeModal);
-
-
 
 const pristine = new Pristine(pictureFormElement, {
   classTo: 'img-upload__field-wrapper',
