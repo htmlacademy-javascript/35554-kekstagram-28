@@ -28,6 +28,7 @@ const openPictureElement = () => {
 const closePictureElement = () => {
   bigPictureContainerElement.classList.add('hidden');
   clearCommentsList();
+  commentsCountContainerElement.innerHTML = '';
   commentsLoaderElement.classList.remove('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
@@ -51,8 +52,7 @@ const renderCommentsPicture = (elements, from, to) => {
     commentListFragment.append(commentElement);
   });
   commentsPictureElement.append(commentListFragment);
-  commentsCountContainerElement.textContent =
-    `${commentsPictureElement.children.length} из ${elements.length} комментариев`;
+  commentsCountContainerElement.innerHTML = `${commentsPictureElement.children.length} из ${elements.length} комментариев`;
 };
 
 const loadMoreComment = (elements, from, to) => {
@@ -61,8 +61,7 @@ const loadMoreComment = (elements, from, to) => {
     to += MAX_COMMENTS;
     return () => {
       renderCommentsPicture(elements, from, to);
-      commentsCountContainerElement.textContent =
-        `${commentsPictureElement.children.length} из ${elements.length} комментариев`;
+      commentsCountContainerElement.textContent = `${commentsPictureElement.children.length} из ${elements.length} комментариев`;
       if (commentsPictureElement.children.length === elements.length) {
         commentsLoaderElement.classList.add('hidden');
       }
