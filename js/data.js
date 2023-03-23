@@ -7,7 +7,8 @@ const MAX_ID_AVATAR = 6;
 const MAX_NUMBER_SENTENCE = 2;
 const MIN_LIKES = 15;
 const MAX_LIKES = 200;
-const SIMILAR_COMMENT_COUNT = 12;
+const MIN_COMMENT_COUNT = 6;
+const MAX_COMMENT_COUNT = 32;
 
 const MESSAGES = [
   'Всё отлично!',
@@ -47,6 +48,7 @@ const DESCRIPTIONS = [
 const randomId = createIdGenerator(MAX_ID_PHOTO);
 const randomIdPhoto = createIdGenerator(MAX_ID_PHOTO);
 const randomIdComment = createRandomId(MIN_NUMBER, MAX_ID_COMMENT);
+const similarCommentCount = createRandomId(MIN_COMMENT_COUNT, MAX_COMMENT_COUNT);
 
 const createCommentPhoto = () => ({
   id: randomIdComment(),
@@ -61,7 +63,7 @@ const createDescriptionPublishedPhoto = () => ({
   url: `photos/${randomIdPhoto()}.jpg`,
   description: getRandomArrayElement(DESCRIPTIONS),
   likes: getRandomInteger(MIN_LIKES, MAX_LIKES),
-  comments: Array.from({length: SIMILAR_COMMENT_COUNT}, createCommentPhoto),
+  comments: Array.from({length: similarCommentCount()}, createCommentPhoto),
 });
 
 const createDescriptionsPhoto = () => Array.from({length: MAX_ID_PHOTO},
