@@ -15,24 +15,36 @@ const textDescriptionElement = pictureFormElement.querySelector('.text__descript
 
 const hashtagRegex = /^#[a-zа-яё\d]{1,19}$/i;
 
+const pristine = new Pristine(pictureFormElement, {
+  classTo: 'img-upload__field-wrapper',
+  errorTextParent: 'img-upload__field-wrapper',
+  errorTextClass: 'img-upload__field-wrapper--error'
+}, false);
+
 const openModal = () => {
+  resetScale();
   formEditImageElement.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  resetScale();
-  document.addEventListener('keydown', onDocumentKeydown);
+  document.addEventListener('keydown', onModalKeydown);
 };
 
 const closeModal = () => {
   formEditImageElement.classList.add('hidden');
   document.body.classList.remove('modal-open');
   pictureFormElement.reset();
-  uploadImageElement.value = '';
-  textHashtagElement.value = '';
-  textDescriptionElement.value = '';
-  document.removeEventListener('keydown', onDocumentKeydown);
+  pristine.reset();
+  document.removeEventListener('keydown', onModalKeydown);
 };
 
-function onDocumentKeydown(evt) {
+const onFileLoadInput = () => {
+  openModal();
+};
+
+const onButtonCloseModal = () => {
+  closeModal();
+};
+
+function onModalKeydown(evt) {
   if (textDescriptionElement === document.activeElement || textHashtagElement === document.activeElement) {
     return evt.stopPropagation();
   } else {
@@ -43,18 +55,6 @@ function onDocumentKeydown(evt) {
   }
 }
 
-uploadImageElement.addEventListener('change', () => {
-  openModal();
-  // editScalePicture();
-});
-
-uploadCancelElement.addEventListener('click', closeModal);
-
-const pristine = new Pristine(pictureFormElement, {
-  classTo: 'img-upload__field-wrapper',
-  errorTextParent: 'img-upload__field-wrapper'
-}, false);
-
 const validateTextDescription = (value) => value.length <= MAX_LENGTH_DESCRIPTION;
 
 pristine.addValidator(textDescriptionElement, validateTextDescription, ERROR_DESCRIPTION);
@@ -64,7 +64,7 @@ const validateHashtag = (value) => {
   const duplicates = textInput.filter((element, index, elements) =>
     elements.indexOf(element) !== index);
   if (duplicates.length === 0 && textInput.length <= MAX_HASHTAG) {
-    return textInput.every((elem) => hashtagRegex.test(elem));
+    return textInput.every((tag) => hashtagRegex.test(tag));
   }
 };
 
@@ -74,7 +74,13 @@ pristine.addValidator(
   ERROR_HASHTAG
 );
 
-pictureFormElement.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
+const onFormSubmit = (evt) => {
+  const isValid = pristine.validate();
+  if (!isValid) {
+    evt.preventDefault();
+  }
+};
+
+uploadImageElement.addEventListener('change', onFileLoadInput);
+uploadCancelElement.addEventListener('click', onButtonCloseModal);
+pictureFormElement.addEventListener('submit', onFormSubmit);

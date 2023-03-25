@@ -58,7 +58,7 @@ const createCommentPhoto = () => ({
   name: getRandomArrayElement(NAMES),
 });
 
-const createDescriptionPublishedPhoto = () => ({
+const createDetailPhoto = () => ({
   id: randomId(),
   url: `photos/${randomIdPhoto()}.jpg`,
   description: getRandomArrayElement(DESCRIPTIONS),
@@ -66,8 +66,8 @@ const createDescriptionPublishedPhoto = () => ({
   comments: Array.from({length: similarCommentCount()}, createCommentPhoto),
 });
 
-const createDescriptionsPhoto = () => Array.from({length: MAX_ID_PHOTO},
-  createDescriptionPublishedPhoto);
+const createDetailsPhoto = () => Array.from({length: MAX_ID_PHOTO},
+  createDetailPhoto);
 
-export {createDescriptionsPhoto};
+export {createDetailsPhoto};
 
