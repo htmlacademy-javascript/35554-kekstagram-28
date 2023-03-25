@@ -35,4 +35,4 @@ const resetScale = () => changeValueScale(MAX_SCALE);
 scaleSmallerElement.addEventListener('click', onScaleSmaller);
 scaleBiggerElement.addEventListener('click', onScaleBigger);
 
-export {resetScale};
+export {resetScale, imagePreviewElement};
