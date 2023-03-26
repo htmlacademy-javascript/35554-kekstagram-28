@@ -37,4 +37,14 @@ const getRandomArrayElement = (elements) =>
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-export {createIdGenerator, getRandomInteger, createRandomId, getRandomArrayElement, isEscapeKey};
+const isNumbers = (string) => {
+  let newArray = '';
+  for (let i = 0; i < string.length; i++) {
+    if (!isNaN(parseInt(string[i], 10))) {
+      newArray += string[i];
+    }
+  }
+  return Number(newArray);
+};
+
+export {createIdGenerator, getRandomInteger, createRandomId, getRandomArrayElement, isEscapeKey, isNumbers};
