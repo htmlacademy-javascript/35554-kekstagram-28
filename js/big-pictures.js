@@ -69,27 +69,27 @@ const renderBigPicture = (element) => {
   }
 };
 
-const onCloseBigPicture = () => {
+const onBigPictureClose = () => {
   clearCommentsList();
   commentsCountContainerElement.innerHTML = '';
   bigPictureContainerElement.classList.add('hidden');
   commentsLoaderElement.classList.remove('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
-  bigPictureCloseElement.removeEventListener('click', onCloseBigPicture);
+  bigPictureCloseElement.removeEventListener('click', onBigPictureClose);
 };
 
 const openBigPicture = () => {
   bigPictureContainerElement.classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
-  bigPictureCloseElement.addEventListener('click', onCloseBigPicture);
+  bigPictureCloseElement.addEventListener('click', onBigPictureClose);
 };
 
 function onDocumentKeydown(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    onCloseBigPicture();
+    onBigPictureClose();
   }
 }
 

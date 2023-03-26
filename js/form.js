@@ -1,5 +1,6 @@
 import {isEscapeKey} from './util.js';
-import {resetScale} from './scale.js';
+import {resetScale, onScaleBigger, onScaleSmaller} from './scale.js';
+import {onEffectsChange, resetEffects} from './effect-picture.js';
 
 const MAX_HASHTAG = 5;
 const MAX_LENGTH_DESCRIPTION = 140;
@@ -12,6 +13,9 @@ const uploadImageElement = document.querySelector('#upload-file');
 const uploadCancelElement = document.querySelector('#upload-cancel');
 const textHashtagElement = pictureFormElement.querySelector('.text__hashtags');
 const textDescriptionElement = pictureFormElement.querySelector('.text__description');
+const scaleSmallerElement = document.querySelector('.scale__control--smaller');
+const scaleBiggerElement = document.querySelector('.scale__control--bigger');
+const effectsElement = document.querySelector('.effects');
 
 const hashtagRegex = /^#[a-zа-яё\d]{1,19}$/i;
 
@@ -20,40 +24,6 @@ const pristine = new Pristine(pictureFormElement, {
   errorTextParent: 'img-upload__field-wrapper',
   errorTextClass: 'img-upload__field-wrapper--error'
 }, false);
-
-const openModal = () => {
-  resetScale();
-  formEditImageElement.classList.remove('hidden');
-  document.body.classList.add('modal-open');
-  document.addEventListener('keydown', onModalKeydown);
-};
-
-const closeModal = () => {
-  formEditImageElement.classList.add('hidden');
-  document.body.classList.remove('modal-open');
-  pictureFormElement.reset();
-  pristine.reset();
-  document.removeEventListener('keydown', onModalKeydown);
-};
-
-const onFileLoadInput = () => {
-  openModal();
-};
-
-const onButtonCloseModal = () => {
-  closeModal();
-};
-
-function onModalKeydown(evt) {
-  if (textDescriptionElement === document.activeElement || textHashtagElement === document.activeElement) {
-    return evt.stopPropagation();
-  } else {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      closeModal();
-    }
-  }
-}
 
 const validateTextDescription = (value) => value.length <= MAX_LENGTH_DESCRIPTION;
 
@@ -81,6 +51,43 @@ const onFormSubmit = (evt) => {
   }
 };
 
-uploadImageElement.addEventListener('change', onFileLoadInput);
-uploadCancelElement.addEventListener('click', onButtonCloseModal);
-pictureFormElement.addEventListener('submit', onFormSubmit);
+const modalCloseHandler = () => {
+  formEditImageElement.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  pictureFormElement.reset();
+  pristine.reset();
+  document.removeEventListener('keydown', onModalKeydown);
+  uploadCancelElement.removeEventListener('click', modalCloseHandler);
+  pictureFormElement.removeEventListener('submit', onFormSubmit);
+  scaleSmallerElement.removeEventListener('click', onScaleSmaller);
+  scaleBiggerElement.removeEventListener('click', onScaleBigger);
+  effectsElement.removeEventListener('change', onEffectsChange);
+};
+
+const modalOpenHandler = () => {
+  resetScale();
+  resetEffects();
+  formEditImageElement.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  document.addEventListener('keydown', onModalKeydown);
+  uploadCancelElement.addEventListener('click', modalCloseHandler);
+  pictureFormElement.addEventListener('submit', onFormSubmit);
+  scaleSmallerElement.addEventListener('click', onScaleSmaller);
+  scaleBiggerElement.addEventListener('click', onScaleBigger);
+  effectsElement.addEventListener('change', onEffectsChange);
+};
+
+function onModalKeydown(evt) {
+  if (textDescriptionElement === document.activeElement || textHashtagElement === document.activeElement) {
+    return evt.stopPropagation();
+  } else {
+    if (isEscapeKey(evt)) {
+      evt.preventDefault();
+      modalCloseHandler();
+    }
+  }
+}
+
+uploadImageElement.addEventListener('change', modalOpenHandler);
+
+export {formEditImageElement};

@@ -2,13 +2,11 @@ const MIN_SCALE = 25;
 const MAX_SCALE = 100;
 const STEP_SCALE = 25;
 
-const scaleSmallerElement = document.querySelector('.scale__control--smaller');
-const scaleBiggerElement = document.querySelector('.scale__control--bigger');
 const scaleValueElement = document.querySelector('.scale__control--value');
 const imagePreviewElement = document.querySelector('.img-upload__preview img');
 
 const changeValueScale = (element) => {
-  scaleValueElement.setAttribute('value', `${element} %`);
+  scaleValueElement.value = `${element} %`;
   imagePreviewElement.style.transform = `scale(${element / 100})`;
 };
 
@@ -32,7 +30,4 @@ const onScaleBigger = () => {
 
 const resetScale = () => changeValueScale(MAX_SCALE);
 
-scaleSmallerElement.addEventListener('click', onScaleSmaller);
-scaleBiggerElement.addEventListener('click', onScaleBigger);
-
-export {resetScale, imagePreviewElement};
+export {resetScale, imagePreviewElement, onScaleSmaller, onScaleBigger};
