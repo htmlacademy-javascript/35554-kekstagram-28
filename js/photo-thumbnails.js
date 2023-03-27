@@ -1,13 +1,9 @@
-import {createDetailsPhoto} from './data.js';
-
 const pictureContainer = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
-const pictureThumbnails = createDetailsPhoto();
-
-const renderThumbnails = () => {
+const renderThumbnails = (pictureThumbnails) => {
   const pictureListFragment = document.createDocumentFragment();
 
   pictureThumbnails.forEach(({id, url, likes, comments}) => {
@@ -22,4 +18,4 @@ const renderThumbnails = () => {
   pictureContainer.append(pictureListFragment);
 };
 
-export {pictureThumbnails, renderThumbnails};
+export {renderThumbnails};
