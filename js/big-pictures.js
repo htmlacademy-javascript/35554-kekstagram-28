@@ -1,5 +1,5 @@
 import {isEscapeKey} from './util.js';
-import {pictureThumbnails} from './photo-thumbnails.js';
+// import {renderThumbnails} from './photo-thumbnails.js';
 
 const MAX_COMMENTS = 5;
 
@@ -56,7 +56,7 @@ const renderComments = (elements, from, to) => {
 
 const renderBigPicture = (element) => {
   const from = 0;
-  const to = element.comments.length <= MAX_COMMENTS ? element.comments.length : MAX_COMMENTS;
+  const to = MAX_COMMENTS;
   bigPictureElement.src = element.url;
   likesCountPictureElement.textContent = element.likes;
   commentsCountElement.textContent = element.comments.length;
@@ -93,14 +93,18 @@ function onDocumentKeydown(evt) {
   }
 }
 
-picturesContainerElement.addEventListener('click', (evt) => {
-  const thumbnail = evt.target.closest('.picture');
-  if (thumbnail) {
-    evt.preventDefault();
-    openBigPicture();
-    const dataPicture = pictureThumbnails.find(
-      (item) => item.id === parseInt(thumbnail.dataset.thumbnailId, 10)
-    );
-    renderBigPicture(dataPicture);
-  }
-});
+const renderGallery = (pictureThumbnails) => {
+  picturesContainerElement.addEventListener('click', (evt) => {
+    const thumbnail = evt.target.closest('.picture');
+    if (thumbnail) {
+      evt.preventDefault();
+      openBigPicture();
+      const dataPicture = pictureThumbnails.find(
+        (item) => item.id === parseInt(thumbnail.dataset.thumbnailId, 10)
+      );
+      renderBigPicture(dataPicture);
+    }
+  });
+};
+
+export {renderGallery};

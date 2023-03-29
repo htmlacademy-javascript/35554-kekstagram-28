@@ -1,6 +1,15 @@
+import {createDetailsPhoto} from './data.js';
+import {renderGallery} from './big-pictures.js';
 import {renderThumbnails} from './photo-thumbnails.js';
-import './big-pictures.js';
-import './form.js';
-import './effect-picture.js';
+import {modalCloseHandler} from './form-modal.js';
+import {onFormSubmit} from './form.js';
+import {getData} from './api.js';
 
-renderThumbnails();
+renderGallery(createDetailsPhoto());
+
+getData()
+  .then((thumbnails) => {
+    renderThumbnails(thumbnails);
+  });
+
+onFormSubmit(modalCloseHandler);
