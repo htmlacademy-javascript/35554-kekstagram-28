@@ -20,7 +20,7 @@ const validateTextDescription = (value) => value.length <= MAX_LENGTH_DESCRIPTIO
 pristine.addValidator(textDescriptionElement, validateTextDescription, ERROR_DESCRIPTION);
 
 const validateHashtag = (value) => {
-  const textInput = value.trim().split(' ');
+  const textInput = value.trim().split(' ').filter((text) => text.trim().length);
   const duplicates = textInput.filter((element, index, elements) =>
     elements.indexOf(element) !== index);
   if (duplicates.length === 0 && textInput.length <= MAX_HASHTAG) {
