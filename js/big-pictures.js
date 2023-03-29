@@ -1,5 +1,5 @@
 import {isEscapeKey} from './util.js';
-import {renderThumbnails} from './photo-thumbnails.js';
+// import {renderThumbnails} from './photo-thumbnails.js';
 
 const MAX_COMMENTS = 5;
 

@@ -55,7 +55,10 @@ const onSliderUpdate = () => {
   effectValueElement.value = sliderValue;
 };
 
-const resetEffects = () => updateOptionsSlider(DEFAULT_EFFECT);
+const resetEffects = () => {
+  effectCurrent = DEFAULT_EFFECT;
+  updateOptionsSlider();
+};
 
 noUiSlider.create(effectSliderElement, {
   range: {
@@ -68,6 +71,6 @@ noUiSlider.create(effectSliderElement, {
 });
 sliderHide();
 
-effectSliderElement.noUiSlider.on('update', onSliderUpdate);
+// effectSliderElement.noUiSlider.on('update', onSliderUpdate);
 
-export {resetEffects, onEffectsChange};
+export {resetEffects, onEffectsChange, onSliderUpdate};

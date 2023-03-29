@@ -1,52 +1,101 @@
 import {isEscapeKey} from './util.js';
-import {resetScale, onScaleBigger, onScaleSmaller} from './scale.js';
-import {onEffectsChange, resetEffects} from './effect-picture.js';
+import {sendData} from './api.js';
+import {pristine} from './validation.js';
+import {onModalKeydown} from './form-modal.js';
+
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Опубликовываю...'
+};
+
+const successMessageTemplate = document.querySelector('#success')
+  .content
+  .querySelector('.success');
+
+const errorMessageTemplate = document.querySelector('#error')
+  .content
+  .querySelector('.error');
+
+const successMessage = successMessageTemplate.cloneNode(true);
+const errorMessage = errorMessageTemplate.cloneNode(true);
 
 const pictureFormElement = document.querySelector('.img-upload__form');
-const formEditImageElement = document.querySelector('.img-upload__overlay');
-const uploadImageElement = document.querySelector('#upload-file');
-const uploadCancelElement = document.querySelector('#upload-cancel');
-const textHashtagElement = pictureFormElement.querySelector('.text__hashtags');
-const textDescriptionElement = pictureFormElement.querySelector('.text__description');
-const scaleSmallerElement = document.querySelector('.scale__control--smaller');
-const scaleBiggerElement = document.querySelector('.scale__control--bigger');
-const effectsElement = document.querySelector('.effects');
+const submitButtonElement = document.querySelector('.img-upload__submit');
 
-const modalCloseHandler = () => {
-  formEditImageElement.classList.add('hidden');
-  document.body.classList.remove('modal-open');
-  pictureFormElement.reset();
-  // pristine.reset();
-  document.removeEventListener('keydown', onModalKeydown);
-  uploadCancelElement.removeEventListener('click', modalCloseHandler);
-  scaleSmallerElement.removeEventListener('click', onScaleSmaller);
-  scaleBiggerElement.removeEventListener('click', onScaleBigger);
-  effectsElement.removeEventListener('change', onEffectsChange);
-};
-
-const modalOpenHandler = () => {
-  resetScale();
-  resetEffects();
-  formEditImageElement.classList.remove('hidden');
-  document.body.classList.add('modal-open');
-  document.addEventListener('keydown', onModalKeydown);
-  uploadCancelElement.addEventListener('click', modalCloseHandler);
-  scaleSmallerElement.addEventListener('click', onScaleSmaller);
-  scaleBiggerElement.addEventListener('click', onScaleBigger);
-  effectsElement.addEventListener('change', onEffectsChange);
-};
-
-function onModalKeydown(evt) {
-  if (textDescriptionElement === document.activeElement || textHashtagElement === document.activeElement) {
-    return evt.stopPropagation();
-  } else {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      modalCloseHandler();
-    }
+const onSuccessMessageClose = (evt) => {
+  if (evt.target.closest('.success__button') || !evt.target.closest('.success__inner')) {
+    successMessage.remove();
+    // eslint-disable-next-line no-use-before-define
+    document.removeEventListener('keydown', onSuccessKeydown);
+    document.removeEventListener('click', onSuccessMessageClose);
   }
-}
+};
 
-uploadImageElement.addEventListener('change', modalOpenHandler);
+const onSuccessKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    successMessage.remove();
+    document.removeEventListener('keydown', onSuccessKeydown);
+    document.removeEventListener('click', onSuccessMessageClose);
+  }
+};
 
-export {formEditImageElement, modalOpenHandler, modalCloseHandler};
+const showSuccessMessage = () => {
+  document.body.append(successMessage);
+  document.addEventListener('keydown', onSuccessKeydown);
+  document.addEventListener('click', onSuccessMessageClose);
+};
+
+const onErrorKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    errorMessage.remove();
+    document.removeEventListener('keydown', onErrorKeydown);
+    // eslint-disable-next-line no-use-before-define
+    document.removeEventListener('click', onErrorMessageClose);
+    document.addEventListener('keydown', onModalKeydown);
+  }
+};
+
+const onErrorMessageClose = (evt) => {
+  if (evt.target.closest('.error__button') || !evt.target.closest('.error__inner')) {
+    errorMessage.remove();
+    document.removeEventListener('keydown', onErrorKeydown);
+    document.removeEventListener('click', onErrorMessageClose);
+    document.addEventListener('keydown', onModalKeydown);
+  }
+};
+
+const showErrorMessage = () => {
+  document.body.append(errorMessage);
+  document.removeEventListener('keydown', onModalKeydown);
+  document.addEventListener('keydown', onErrorKeydown);
+  document.addEventListener('click', onErrorMessageClose);
+};
+
+const blockSubmitButton = () => {
+  submitButtonElement.disabled = true;
+  submitButtonElement.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButtonElement.disabled = false;
+  submitButtonElement.textContent = SubmitButtonText.IDLE;
+};
+
+const onFormSubmit = (onSuccess) => {
+  pictureFormElement.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then(onSuccess)
+        .then(showSuccessMessage)
+        .catch(showErrorMessage)
+        .finally(unblockSubmitButton);
+    }
+  });
+};
+
+export {onFormSubmit};
