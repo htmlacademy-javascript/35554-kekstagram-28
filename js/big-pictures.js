@@ -1,7 +1,7 @@
 import {isEscapeKey} from './util.js';
-// import {renderThumbnails} from './photo-thumbnails.js';
 
 const MAX_COMMENTS = 5;
+let comments;
 
 const bigPictureContainerElement = document.querySelector('.big-picture');
 const picturesContainerElement = document.querySelector('.pictures');
@@ -24,9 +24,9 @@ const createCommentCount = (elements) => {
     `${commentsPictureElement.children.length} из ${elements.length} комментариев`;
 };
 
-const createCommentsPicture = (elements, from, to) => {
+const createCommentsPicture = (elements) => {
   const commentListFragment = document.createDocumentFragment();
-  elements.slice(from, to).forEach(({avatar, name, message}) => {
+  elements.forEach(({avatar, name, message}) => {
     const commentElement = commentPictureElement.cloneNode(true);
     commentElement.querySelector('.social__picture').src = avatar;
     commentElement.querySelector('.social__picture').alt = name;
@@ -34,39 +34,37 @@ const createCommentsPicture = (elements, from, to) => {
     commentListFragment.append(commentElement);
   });
   commentsPictureElement.append(commentListFragment);
-  createCommentCount(elements);
 };
 
-const renderComments = (elements, from, to) => {
-  if (commentsPictureElement.children.length !== elements.length) {
-    from += MAX_COMMENTS;
-    to += MAX_COMMENTS;
-    return () => {
-      createCommentsPicture(elements, from, to);
-      createCommentCount(elements);
-      if (commentsPictureElement.children.length === elements.length) {
-        commentsLoaderElement.classList.add('hidden');
-        commentsLoaderElement.removeEventListener('click', renderComments(elements, from, to));
-      }
-      from += MAX_COMMENTS;
-      to += MAX_COMMENTS;
-    };
+const renderComments = (elements) => {
+  const commentsShown = elements.slice(0, MAX_COMMENTS);
+  createCommentsPicture(commentsShown);
+  createCommentCount(elements);
+  if (commentsShown.length >= elements.length) {
+    commentsLoaderElement.classList.add('hidden');
+  }
+};
+
+const loadMoreCommentsHandler = () => {
+  const firstComment = commentsPictureElement.children.length;
+  const lastComments = commentsPictureElement.children.length + MAX_COMMENTS;
+  const commentsMoreLoad = comments.slice(firstComment, lastComments);
+  createCommentsPicture(commentsMoreLoad);
+  createCommentCount(comments);
+  if (commentsPictureElement.children.length >= comments.length) {
+    commentsLoaderElement.classList.add('hidden');
   }
 };
 
 const renderBigPicture = (element) => {
-  const from = 0;
-  const to = MAX_COMMENTS;
   bigPictureElement.src = element.url;
   likesCountPictureElement.textContent = element.likes;
   commentsCountElement.textContent = element.comments.length;
   descriptionPictureElement.textContent = element.description;
   clearCommentsList();
-  createCommentsPicture(element.comments, from, to);
-  commentsLoaderElement.addEventListener('click', renderComments(element.comments, from, to));
-  if (commentsPictureElement.children.length === element.comments.length) {
-    commentsLoaderElement.classList.add('hidden');
-  }
+  renderComments(element.comments);
+  comments = element.comments;
+  commentsLoaderElement.addEventListener('click', loadMoreCommentsHandler);
 };
 
 const onBigPictureClose = () => {
@@ -77,6 +75,7 @@ const onBigPictureClose = () => {
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
   bigPictureCloseElement.removeEventListener('click', onBigPictureClose);
+  commentsLoaderElement.removeEventListener('click', loadMoreCommentsHandler);
 };
 
 const openBigPicture = () => {
@@ -93,7 +92,7 @@ function onDocumentKeydown(evt) {
   }
 }
 
-const renderGallery = (pictureThumbnails) => {
+const showBigPicture = (pictureThumbnails) => {
   picturesContainerElement.addEventListener('click', (evt) => {
     const thumbnail = evt.target.closest('.picture');
     if (thumbnail) {
@@ -107,4 +106,4 @@ const renderGallery = (pictureThumbnails) => {
   });
 };
 
-export {renderGallery};
+export {showBigPicture};
