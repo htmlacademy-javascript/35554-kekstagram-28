@@ -5,6 +5,7 @@ import {onFormSubmit} from './form.js';
 import {getData} from './api.js';
 import {getSortingPictures, selectButtonFilter, showFilters} from './sorting.js';
 import {debounce, showAlert} from './util.js';
+import './upload-picture.js';
 
 const RERENDER_DELAY = 500;
 
