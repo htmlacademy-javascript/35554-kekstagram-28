@@ -92,7 +92,7 @@ function onDocumentKeydown(evt) {
   }
 }
 
-const renderGallery = (pictureThumbnails) => {
+const showBigPicture = (pictureThumbnails) => {
   picturesContainerElement.addEventListener('click', (evt) => {
     const thumbnail = evt.target.closest('.picture');
     if (thumbnail) {
@@ -106,4 +106,4 @@ const renderGallery = (pictureThumbnails) => {
   });
 };
 
-export {renderGallery};
+export {showBigPicture};

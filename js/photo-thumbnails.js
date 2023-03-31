@@ -15,6 +15,9 @@ const renderThumbnails = (pictureThumbnails) => {
     pictureListFragment.append(pictureElement);
   });
 
+  pictureContainer
+    .querySelectorAll('.picture')
+    .forEach((element) => element.remove());
   pictureContainer.append(pictureListFragment);
 };
 
