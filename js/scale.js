@@ -10,23 +10,22 @@ const changeValueScale = (element) => {
   imagePreviewElement.style.transform = `scale(${element / 100})`;
 };
 
-const onScaleSmaller = () => {
+const resizePicture = (scale) => {
   let scaleValue = parseInt(scaleValueElement.value, 10);
-  if (scaleValue === MIN_SCALE) {
+  if (scaleValue === scale) {
     return;
   }
-  scaleValue -= STEP_SCALE;
+  if (scale === MIN_SCALE) {
+    scaleValue -= STEP_SCALE;
+  } else if (scale === MAX_SCALE) {
+    scaleValue += STEP_SCALE;
+  }
   changeValueScale(scaleValue);
 };
 
-const onScaleBigger = () => {
-  let scaleValue = parseInt(scaleValueElement.value, 10);
-  if (scaleValue === MAX_SCALE) {
-    return;
-  }
-  scaleValue += STEP_SCALE;
-  changeValueScale(scaleValue);
-};
+const onScaleSmaller = () => resizePicture(MIN_SCALE);
+
+const onScaleBigger = () => resizePicture(MAX_SCALE);
 
 const resetScale = () => changeValueScale(MAX_SCALE);
 

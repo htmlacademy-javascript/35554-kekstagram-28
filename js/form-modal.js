@@ -2,6 +2,7 @@ import {pristine} from './validation.js';
 import {onScaleBigger, onScaleSmaller, resetScale} from './scale.js';
 import {onEffectsChange, onSliderUpdate, resetEffects} from './effect-picture.js';
 import {isEscapeKey} from './util.js';
+import {resetPreviewPicture, showUploadPicture} from './upload-picture.js';
 
 const pictureFormElement = document.querySelector('.img-upload__form');
 const formEditImageElement = document.querySelector('.img-upload__overlay');
@@ -14,26 +15,27 @@ const scaleBiggerElement = document.querySelector('.scale__control--bigger');
 const effectsElement = document.querySelector('.effects');
 const effectSliderElement = document.querySelector('.effect-level__slider');
 
-const modalCloseHandler = () => {
+const onModalClose = () => {
   formEditImageElement.classList.add('hidden');
   document.body.classList.remove('modal-open');
   pictureFormElement.reset();
   pristine.reset();
+  resetPreviewPicture();
+  resetEffects();
   document.removeEventListener('keydown', onModalKeydown);
-  uploadCancelElement.removeEventListener('click', modalCloseHandler);
+  uploadCancelElement.removeEventListener('click', onModalClose);
   scaleSmallerElement.removeEventListener('click', onScaleSmaller);
   scaleBiggerElement.removeEventListener('click', onScaleBigger);
   effectsElement.removeEventListener('change', onEffectsChange);
   effectSliderElement.noUiSlider.off('update', onSliderUpdate);
 };
 
-const modalOpenHandler = () => {
+const onModalOpen = () => {
   resetScale();
-  resetEffects();
   formEditImageElement.classList.remove('hidden');
   document.body.classList.add('modal-open');
   document.addEventListener('keydown', onModalKeydown);
-  uploadCancelElement.addEventListener('click', modalCloseHandler);
+  uploadCancelElement.addEventListener('click', onModalClose);
   scaleSmallerElement.addEventListener('click', onScaleSmaller);
   scaleBiggerElement.addEventListener('click', onScaleBigger);
   effectsElement.addEventListener('change', onEffectsChange);
@@ -43,14 +45,16 @@ const modalOpenHandler = () => {
 function onModalKeydown(evt) {
   if (textDescriptionElement === document.activeElement || textHashtagElement === document.activeElement) {
     return evt.stopPropagation();
-  } else {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      modalCloseHandler();
-    }
+  }
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    onModalClose();
   }
 }
 
-uploadImageElement.addEventListener('change', modalOpenHandler);
+uploadImageElement.addEventListener('change', () => {
+  onModalOpen();
+  showUploadPicture();
+});
 
-export {modalCloseHandler, onModalKeydown};
+export {onModalClose, onModalKeydown};
