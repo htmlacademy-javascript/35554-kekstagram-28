@@ -71,6 +71,4 @@ noUiSlider.create(effectSliderElement, {
 });
 sliderHide();
 
-// effectSliderElement.noUiSlider.on('update', onSliderUpdate);
-
 export {resetEffects, onEffectsChange, onSliderUpdate};

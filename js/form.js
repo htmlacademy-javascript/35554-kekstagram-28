@@ -24,21 +24,22 @@ const submitButtonElement = document.querySelector('.img-upload__submit');
 
 const onSuccessMessageClose = (evt) => {
   if (evt.target.closest('.success__button') || !evt.target.closest('.success__inner')) {
-    successMessage.remove();
-    // eslint-disable-next-line no-use-before-define
-    document.removeEventListener('keydown', onSuccessKeydown);
-    document.removeEventListener('click', onSuccessMessageClose);
+    messageSuccessClose();
   }
 };
 
-const onSuccessKeydown = (evt) => {
+function messageSuccessClose() {
+  successMessage.remove();
+  document.removeEventListener('keydown', onSuccessKeydown);
+  document.removeEventListener('click', onSuccessMessageClose);
+}
+
+function onSuccessKeydown(evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    successMessage.remove();
-    document.removeEventListener('keydown', onSuccessKeydown);
-    document.removeEventListener('click', onSuccessMessageClose);
+    messageSuccessClose();
   }
-};
+}
 
 const showSuccessMessage = () => {
   document.body.append(successMessage);
@@ -46,25 +47,25 @@ const showSuccessMessage = () => {
   document.addEventListener('click', onSuccessMessageClose);
 };
 
-const onErrorKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    errorMessage.remove();
-    document.removeEventListener('keydown', onErrorKeydown);
-    // eslint-disable-next-line no-use-before-define
-    document.removeEventListener('click', onErrorMessageClose);
-    document.addEventListener('keydown', onModalKeydown);
+const onErrorMessageClose = (evt) => {
+  if (evt.target.closest('.error__button') || !evt.target.closest('.error__inner')) {
+    messageErrorClose();
   }
 };
 
-const onErrorMessageClose = (evt) => {
-  if (evt.target.closest('.error__button') || !evt.target.closest('.error__inner')) {
-    errorMessage.remove();
-    document.removeEventListener('keydown', onErrorKeydown);
-    document.removeEventListener('click', onErrorMessageClose);
-    document.addEventListener('keydown', onModalKeydown);
+function messageErrorClose() {
+  errorMessage.remove();
+  document.removeEventListener('keydown', onErrorKeydown);
+  document.removeEventListener('click', onErrorMessageClose);
+  document.addEventListener('keydown', onModalKeydown);
+}
+
+function onErrorKeydown(evt) {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    messageErrorClose();
   }
-};
+}
 
 const showErrorMessage = () => {
   document.body.append(errorMessage);
@@ -73,17 +74,16 @@ const showErrorMessage = () => {
   document.addEventListener('click', onErrorMessageClose);
 };
 
-const blockSubmitButton = () => {
-  submitButtonElement.disabled = true;
-  submitButtonElement.textContent = SubmitButtonText.SENDING;
+const changeSubmitButton = (bool, buttonText) => {
+  submitButtonElement.disabled = bool;
+  submitButtonElement.textContent = buttonText;
 };
 
-const unblockSubmitButton = () => {
-  submitButtonElement.disabled = false;
-  submitButtonElement.textContent = SubmitButtonText.IDLE;
-};
+const blockSubmitButton = () => changeSubmitButton(true, SubmitButtonText.SENDING);
 
-const onFormSubmit = (onSuccess) => {
+const unblockSubmitButton = () => changeSubmitButton(false, SubmitButtonText.IDLE);
+
+const sendFormSubmit = (onSuccess) => {
   pictureFormElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
@@ -98,4 +98,4 @@ const onFormSubmit = (onSuccess) => {
   });
 };
 
-export {onFormSubmit};
+export {sendFormSubmit};

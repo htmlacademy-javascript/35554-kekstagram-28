@@ -1,7 +1,7 @@
 import {showBigPicture} from './big-pictures.js';
 import {renderThumbnails} from './photo-thumbnails.js';
-import {modalCloseHandler} from './form-modal.js';
-import {onFormSubmit} from './form.js';
+import {onModalClose} from './form-modal.js';
+import {sendFormSubmit} from './form.js';
 import {getData} from './api.js';
 import {getSortingPictures, selectButtonFilter, showFilters} from './sorting.js';
 import {debounce, showAlert} from './util.js';
@@ -17,4 +17,4 @@ getData()
   })
   .catch((err) => showAlert(err.message));
 
-onFormSubmit(modalCloseHandler);
+sendFormSubmit(onModalClose);

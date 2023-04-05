@@ -1,5 +1,6 @@
 import {isEscapeKey} from './util.js';
 
+const MIN_COMMENTS = 0;
 const MAX_COMMENTS = 5;
 let comments;
 
@@ -16,11 +17,11 @@ const commentPictureElement = document.querySelector('.social__comment');
 const commentsLoaderElement = document.querySelector('.comments-loader');
 
 const clearCommentsList = () => {
-  commentsPictureElement.innerHTML = '';
+  commentsPictureElement.textContent = '';
 };
 
 const createCommentCount = (elements) => {
-  commentsCountContainerElement.innerHTML =
+  commentsCountContainerElement.textContent =
     `${commentsPictureElement.children.length} из ${elements.length} комментариев`;
 };
 
@@ -37,7 +38,7 @@ const createCommentsPicture = (elements) => {
 };
 
 const renderComments = (elements) => {
-  const commentsShown = elements.slice(0, MAX_COMMENTS);
+  const commentsShown = elements.slice(MIN_COMMENTS, MAX_COMMENTS);
   createCommentsPicture(commentsShown);
   createCommentCount(elements);
   if (commentsShown.length >= elements.length) {
@@ -45,7 +46,7 @@ const renderComments = (elements) => {
   }
 };
 
-const loadMoreCommentsHandler = () => {
+const onButtonLoadMoreComments = () => {
   const firstComment = commentsPictureElement.children.length;
   const lastComments = commentsPictureElement.children.length + MAX_COMMENTS;
   const commentsMoreLoad = comments.slice(firstComment, lastComments);
@@ -64,18 +65,18 @@ const renderBigPicture = (element) => {
   clearCommentsList();
   renderComments(element.comments);
   comments = element.comments;
-  commentsLoaderElement.addEventListener('click', loadMoreCommentsHandler);
+  commentsLoaderElement.addEventListener('click', onButtonLoadMoreComments);
 };
 
 const onBigPictureClose = () => {
   clearCommentsList();
-  commentsCountContainerElement.innerHTML = '';
+  commentsCountContainerElement.textContent = '';
   bigPictureContainerElement.classList.add('hidden');
   commentsLoaderElement.classList.remove('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
   bigPictureCloseElement.removeEventListener('click', onBigPictureClose);
-  commentsLoaderElement.removeEventListener('click', loadMoreCommentsHandler);
+  commentsLoaderElement.removeEventListener('click', onButtonLoadMoreComments);
 };
 
 const openBigPicture = () => {

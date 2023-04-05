@@ -28,10 +28,6 @@ const validateHashtag = (value) => {
   }
 };
 
-pristine.addValidator(
-  textHashtagElement,
-  validateHashtag,
-  ERROR_HASHTAG
-);
+pristine.addValidator(textHashtagElement, validateHashtag, ERROR_HASHTAG);
 
 export {pristine};
