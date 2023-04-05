@@ -83,7 +83,7 @@ const blockSubmitButton = () => changeSubmitButton(true, SubmitButtonText.SENDIN
 
 const unblockSubmitButton = () => changeSubmitButton(false, SubmitButtonText.IDLE);
 
-const onFormSubmit = (onSuccess) => {
+const sendFormSubmit = (onSuccess) => {
   pictureFormElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
@@ -98,4 +98,4 @@ const onFormSubmit = (onSuccess) => {
   });
 };
 
-export {onFormSubmit};
+export {sendFormSubmit};
