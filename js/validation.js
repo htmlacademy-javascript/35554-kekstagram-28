@@ -20,11 +20,11 @@ const validateTextDescription = (value) => value.length <= MAX_LENGTH_DESCRIPTIO
 pristine.addValidator(textDescriptionElement, validateTextDescription, ERROR_DESCRIPTION);
 
 const validateHashtag = (value) => {
-  const textInput = value.trim().split(' ').filter((text) => text.trim().length);
-  const duplicates = textInput.filter((element, index, elements) =>
-    elements.indexOf(element) !== index);
-  if (duplicates.length === 0 && textInput.length <= MAX_HASHTAG) {
-    return textInput.every((tag) => hashtagRegex.test(tag));
+  const values = value.trim().split(' ')
+    .filter((text) => text.trim().length)
+    .map((text) => text.toLowerCase());
+  if (values.length === new Set(values).size && values.length <= MAX_HASHTAG) {
+    return values.every((tag) => hashtagRegex.test(tag));
   }
 };
 
