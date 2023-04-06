@@ -1,15 +1,57 @@
 import {imagePreviewElement} from './scale.js';
 
-const EFFECTS = [
-  {name: 'none', style: 'none', min: 0, max: 100, step: 1, unit: ''},
-  {name: 'chrome', style: 'grayscale', min: 0, max: 1, step: 0.1, unit: ''},
-  {name: 'sepia', style: 'sepia', min: 0, max: 1, step: 0.1, unit: ''},
-  {name: 'marvin', style: 'invert', min: 0, max: 100, step: 1, unit: '%'},
-  {name: 'phobos', style: 'blur', min: 0, max: 3, step: 0.1, unit: 'px'},
-  {name: 'heat', style: 'brightness', min: 1, max: 3, step: 0.1, unit: ''}
-];
+const Effects = {
+  NONE: {
+    NAME: 'none',
+    STYLE: 'none',
+    MIN: 0,
+    MAX: 100,
+    STEP: 1,
+    UNIT: '',
+  },
+  CHROME: {
+    NAME: 'chrome',
+    STYLE: 'grayscale',
+    MIN: 0,
+    MAX: 1,
+    STEP: 0.1,
+    UNIT: '',
+  },
+  SEPIA: {
+    NAME: 'sepia',
+    STYLE: 'sepia',
+    MIN: 0,
+    MAX: 1,
+    STEP: 0.1,
+    UNIT: '',
+  },
+  MARVIN: {
+    NAME: 'marvin',
+    STYLE: 'invert',
+    MIN: 0,
+    MAX: 100,
+    STEP: 1,
+    UNIT: '%',
+  },
+  PHOBOS: {
+    NAME: 'phobos',
+    STYLE: 'blur',
+    MIN: 0,
+    MAX: 3,
+    STEP: 0.1,
+    UNIT: 'px',
+  },
+  HEAT: {
+    NAME: 'heat',
+    STYLE: 'brightness',
+    MIN: 1,
+    MAX: 3,
+    STEP: 0.1,
+    UNIT: '',
+  }
+};
 
-const DEFAULT_EFFECT = EFFECTS[0];
+const DEFAULT_EFFECT = Effects.NONE;
 let effectCurrent = DEFAULT_EFFECT;
 
 const effectValueElement = document.querySelector('.effect-level__value');
@@ -25,11 +67,11 @@ const sliderShow = () => effectContainerElement.classList.remove('hidden');
 const updateOptionsSlider = () => {
   effectSliderElement.noUiSlider.updateOptions({
     range: {
-      min: effectCurrent.min,
-      max: effectCurrent.max
+      min: effectCurrent.MIN,
+      max: effectCurrent.MAX
     },
-    start: effectCurrent.max,
-    step: effectCurrent.step
+    start: effectCurrent.MAX,
+    step: effectCurrent.STEP
   });
   if (isDefault()) {
     sliderHide();
@@ -41,8 +83,9 @@ const updateOptionsSlider = () => {
 const onEffectsChange = (evt) => {
   const effect = evt.target.closest('.effects__radio');
   if (effect) {
-    effectCurrent = EFFECTS.find((item) => item.name === evt.target.value);
-    imagePreviewElement.className = `effects__preview--${effectCurrent.name}`;
+    const valueEffect = evt.target.value;
+    effectCurrent = Effects[valueEffect.toUpperCase()];
+    imagePreviewElement.className = `effects__preview--${effectCurrent.NAME}`;
     updateOptionsSlider();
   }
 };
@@ -50,8 +93,8 @@ const onEffectsChange = (evt) => {
 const onSliderUpdate = () => {
   const sliderValue = effectSliderElement.noUiSlider.get();
   imagePreviewElement.style.filter = isDefault()
-    ? DEFAULT_EFFECT.style
-    : `${effectCurrent.style}(${sliderValue}${effectCurrent.unit})`;
+    ? DEFAULT_EFFECT.STYLE
+    : `${effectCurrent.STYLE}(${sliderValue}${effectCurrent.UNIT})`;
   effectValueElement.value = sliderValue;
 };
 
@@ -62,11 +105,11 @@ const resetEffects = () => {
 
 noUiSlider.create(effectSliderElement, {
   range: {
-    min: DEFAULT_EFFECT.min,
-    max: DEFAULT_EFFECT.max,
+    min: DEFAULT_EFFECT.MIN,
+    max: DEFAULT_EFFECT.MAX,
   },
-  start: DEFAULT_EFFECT.max,
-  step: DEFAULT_EFFECT.step,
+  start: DEFAULT_EFFECT.MAX,
+  step: DEFAULT_EFFECT.STEP,
   connect: 'lower',
 });
 sliderHide();
